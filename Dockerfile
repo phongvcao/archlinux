@@ -14,6 +14,9 @@ RUN echo -e "phongvcao\nphongvcao" | passwd phongvcao
 RUN echo -e "phongvcao\nphongvcao" | passwd root
 RUN usermod phongvcao -G wheel
 
+COPY mirrorlist /etc/pacman.d/mirrorlist
+COPY mirrorlist.pacnew /etc/pacman.d/mirrorlist.pacnew
+
 RUN rm -rf /etc/pacman.d/gnupg
 RUN pacman-key --init
 RUN pacman-key --populate archlinux
