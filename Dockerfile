@@ -21,8 +21,8 @@ RUN pacman-key --refresh-keys
 RUN pacman-db-upgrade
 RUN pacman --noconfirm -Syyu
 RUN pacman-db-upgrade
-RUN pacman --noconfirm -S python python2 python-pip python2-pip vim git sudo \
-        ranger ruby unzip sdcv vimpager
+RUN pacman --noconfirm -S python python2 python-pip python2-pip vim-python3 \
+        git sudo ranger ruby unzip sdcv vimpager openssh
 
 RUN sed -r -i 's/\# %(wheel|sudo)/%\1/' /etc/sudoers
 
