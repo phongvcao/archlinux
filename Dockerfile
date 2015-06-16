@@ -25,9 +25,19 @@ RUN pacman-db-upgrade
 RUN pacman --noconfirm -Syyu
 RUN pacman-db-upgrade
 RUN pacman --noconfirm -S python python2 python-pip python2-pip vim-python3 \
-        git sudo ranger ruby unzip sdcv vimpager openssh
+        git sudo ranger ruby unzip sdcv vimpager openssh htop man
+
+RUN systemctl enable sshd
 
 RUN sed -r -i 's/\# %(wheel|sudo)/%\1/' /etc/sudoers
+RUN sed -i \-e 's/^#*\(PermitRootLogin\) .*/\1 yes/' \
+        -e 's/^#*\(PasswordAuthentication\) .*/\1 yes/' \
+        -e 's/^#*\(PermitEmptyPasswords\) .*/\1 yes/' \
+        -e 's/^#*\(UsePAM\) .*/\1 no/' \
+        -e 's/^#*\(Port\) .*/\1 22/' \
+        /etc/ssh/sshd_config
+
+RUN /usr/bin/ssh-keygen -A
 
 USER phongvcao
 
@@ -44,3 +54,9 @@ RUN echo -e "phongvcao" | sudo mv "${HOME}/.dotfiles/root${vietAnhDir}" "${vietA
 
 RUN mkdir -p /home/phongvcao/.gem/ruby/2.2.0/bin/
 RUN gem install mdl
+
+EXPOSE 22
+
+ENV USER "phongvcao"
+
+CMD ["/bin/bash", "-c", "echo -e phongvcao | sudo /usr/bin/sshd -D"]
